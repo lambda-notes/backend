@@ -1,9 +1,9 @@
 require('dotenv').config();
-const passport = require('passport');
-const GitHubStrategy = require('passport-github').Strategy;
 const jwt = require('jsonwebtoken');
 const secret = process.env.JWT_SECRET;
 const db = require('../../database/dbConfig');
+const passport = require('passport');
+const GitHubStrategy = require('passport-github').Strategy;
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -21,7 +21,7 @@ passport.deserializeUser((id, done) => {
     });
 });
 
-///////////////////// TOKEN GEN AND AUTHENTICATE /////////////////////
+///////////////////// TOKEN GEN /////////////////////
 function generateToken(id) {
   const payload = {
     subject: id
@@ -32,41 +32,26 @@ function generateToken(id) {
   return jwt.sign(payload, options, secret);
 }
 
-function authenticate(req, res, next) {
-  let token = req.headers.authorization;
-  if (token) {
-    jwt.verify(token, SECRET, (err, decoded) => {
-      if (err)
-        return res.status(401).json({ message: "Didn't work for some reason" });
-
-      req.decoded = decoded;
-
-      next();
-    });
-  } else {
-    return res.status(401).json({
-      error: 'No token provided, must be set on the Authorization Header'
-    });
-  }
-}
-/////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
 
 passport.use(
   new GitHubStrategy(
     {
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: '/auth/github/redirect'
+      callbackURL:
+        'https://lambda-notes-hackathon.netlify.com/auth/github/callback'
     },
     // function(accessToken, refreshToken, profile, cb) {
     //   User.findOrCreate({ githubId: profile.id }, function(err, user) {
     //     return cb(err, user);
     //   });
     // }
+    console.log('thissss isss workinggggggg'),
     async (accessToken, refreshToken, profile, cb) => {
       const existingUser = await db('users')
         .where({
-          eamil: profile.emails[0].value
+          email: profile.emails[0].value
         })
         .first();
       if (existingUser) {
@@ -76,7 +61,7 @@ passport.use(
       } else {
         let accessToken = generateToken.generateToken(profile.emails[0].value);
         await db('users').insert({
-          githubID: profile.id,
+          githubId: profile.id,
           firstName: profile.name.givenName,
           lastName: profile.name.familyName,
           email: profile.emails[0].value,
