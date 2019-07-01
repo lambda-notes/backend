@@ -1,6 +1,7 @@
 require("dotenv").config();
 const passport = require("passport");
 const GitHubStrategy = require("passport-github").Strategy;
+const db = require("../../database/dbConfig");
 
 passport.serializeUser((user, done) => {
     done(null, user.id);
@@ -19,8 +20,8 @@ passport.deserializeUser((id, done) => {
   });
 
 passport.use(new GitHubStrategy({
-    clientID: GITHUB_CLIENT_ID,
-    clientSecret: GITHUB_CLIENT_SECRET,
+    clientID: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
     callbackURL: "https://lambda-notes-hackathon.netlify.com/auth/github/callback"
   },
 //   function(accessToken, refreshToken, profile, cb) {
