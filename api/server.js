@@ -20,7 +20,7 @@ server.use("/api/auth", authRouter);
 // Generic / route for initial server online status check
 const projectName = process.env.PROJECT_NAME || "test";
 server.get("/", (req, res) => {
-  res.send(`The ${projectName} server is up and running!`);
+  res.send(`The ${projectName} server is up and running! 🔥🔥🔥`);
 });
 
 // Server export to be used in index.js
