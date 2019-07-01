@@ -42,11 +42,11 @@ module.exports = {
   production: {
     client: 'mysql',
     connection: {
-      host: process.env.DATABASE_URL_DEV,
-      user: process.env.DATABASE_USER_DEV,
-      port: process.env.DATABASE_PORT_DEV,
-      password: process.env.DATABASE_PASSWORD_DEV,
-      database: process.env.DATABASE_NAME_DEV
+      host: process.env.DATABASE_URL,
+      user: process.env.DATABASE_USER,
+      port: process.env.DATABASE_PORT,
+      password: process.env.DATABASE_PASSWORD,
+      database: process.env.DATABASE_NAME
     },
     pool: {
       min: 2,

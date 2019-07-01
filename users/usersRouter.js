@@ -22,8 +22,7 @@ router.get('/', async (req, res) => {
   } catch (error) {
     res.status(500).json({
       error: true,
-      message: 'There was an error finding the users.',
-      error
+      message: 'There was an error finding the users.'
     });
   }
 });
@@ -46,8 +45,7 @@ router.get('/:id', async (req, res) => {
   } catch (error) {
     res.status(500).json({
       error: true,
-      message: 'There was an error finding the user.',
-      error
+      message: 'There was an error finding the user.'
     });
   }
 });
@@ -112,8 +110,7 @@ router.put('/:id', async (req, res) => {
   } catch (error) {
     res.status(500).json({
       error: false,
-      message: 'There was an error updating the user.',
-      error
+      message: 'There was an error updating the user.'
     });
   }
 });
@@ -136,8 +133,7 @@ router.delete('/:id', async (req, res) => {
   } catch (error) {
     res.status(500).json({
       error: true,
-      message: 'There was an error while deleting the user.',
-      error
+      message: 'There was an error while deleting the user.'
     });
   }
 });
