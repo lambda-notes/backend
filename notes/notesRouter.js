@@ -3,7 +3,6 @@ const Notes = require('./notesModel.js');
 
 const router = express.Router();
 
-
 // Get all notes request
 
 router.get('/', async (req, res) => {
@@ -73,14 +72,38 @@ router.get('/note/:id', async (req, res) => {
         message: 'The note could not be found.',
         notes: {}
       });
-
     }
   } catch (error) {
     res.status(500).json({
       error: true,
       message: 'There was an error finding the note.',
       notes: {}
+    });
+  }
+});
 
+router.post('/', async (req, res) => {
+  try {
+    const newNote = await Notes.insert(req.body);
+    if (newNote) {
+      res.status(200).json({
+        error: false,
+        message: 'The note was created successfully.',
+        note: newNote
+      });
+    } else {
+      res.status(404).json({
+        error: true,
+        message: 'The note could not be created.',
+        notes: {}
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error: true,
+      message: 'There was an error creating the note.',
+      notes: {}
     });
   }
 });
