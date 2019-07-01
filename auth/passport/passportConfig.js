@@ -34,44 +34,48 @@ function generateToken(id) {
 
 ///////////////////////////////////////////////////////
 
-passport.use(
-  new GitHubStrategy(
-    {
-      clientID: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL:
-        'https://lambda-notes-hackathon.netlify.com/auth/github/callback'
-    },
-    // function(accessToken, refreshToken, profile, cb) {
-    //   User.findOrCreate({ githubId: profile.id }, function(err, user) {
-    //     return cb(err, user);
-    //   });
-    // }
-    console.log('thissss isss workinggggggg'),
-    async (accessToken, refreshToken, profile, cb) => {
-      const existingUser = await db('users')
-        .where({
-          email: profile.emails[0].value
-        })
-        .first();
-      if (existingUser) {
-        let accessToken = generateToken.generateToken(existingUser.email);
-        existingUser.token = accessToken;
-        done(null, existingUser); // supplies passport with the user that has authenticated
-      } else {
-        let accessToken = generateToken.generateToken(profile.emails[0].value);
-        await db('users').insert({
-          githubId: profile.id,
-          firstName: profile.name.givenName,
-          lastName: profile.name.familyName,
-          email: profile.emails[0].value,
-          token: accessToken
-        });
-        const user = await db('users')
-          .where({ email: profile.emails[0].value })
+module.exports = function(passport) {
+  passport.use(
+    new GitHubStrategy(
+      {
+        clientID: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        callbackURL:
+          'https://lambda-notes-hackathon.netlify.com/auth/github/callback'
+      },
+      // function(accessToken, refreshToken, profile, cb) {
+      //   User.findOrCreate({ githubId: profile.id }, function(err, user) {
+      //     return cb(err, user);
+      //   });
+      // }
+      console.log('thissss isss workinggggggg'),
+      async (accessToken, refreshToken, profile, cb) => {
+        const existingUser = await db('users')
+          .where({
+            email: profile.emails[0].value
+          })
           .first();
-        done(null, user);
+        if (existingUser) {
+          let accessToken = generateToken.generateToken(existingUser.email);
+          existingUser.token = accessToken;
+          done(null, existingUser); // supplies passport with the user that has authenticated
+        } else {
+          let accessToken = generateToken.generateToken(
+            profile.emails[0].value
+          );
+          await db('users').insert({
+            githubId: profile.id,
+            firstName: profile.name.givenName,
+            lastName: profile.name.familyName,
+            email: profile.emails[0].value,
+            token: accessToken
+          });
+          const user = await db('users')
+            .where({ email: profile.emails[0].value })
+            .first();
+          done(null, user);
+        }
       }
-    }
-  )
-);
+    )
+  );
+};
