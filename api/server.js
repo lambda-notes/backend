@@ -27,7 +27,7 @@ server.get('/', (req, res) => {
   res.send(`The ${projectName} server is up and running! 🔥🔥🔥`);
 });
 
-server.use('/auth', authRoutes);
+server.use('/api/auth', authRoutes);
 
 // Server export to be used in index.js
 module.exports = server;
