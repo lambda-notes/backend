@@ -14,11 +14,13 @@ function findAllNotes() {
 }
 
 function findByNoteId(id) {
-  // Finish
+  return db('notes')
+    .where({ id })
+    .first();
 }
 
-function findByUserId(id) {
-  // Finish
+function findByUserId(userID) {
+  return db('notes').where({ userID });
 }
 
 function insert(note) {
