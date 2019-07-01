@@ -3,6 +3,8 @@ const express = require("express");
 const configureMiddleware = require("./middleware.js");
 const server = express();
 
+const authRoutes = require("./routes/AuthRoutes");
+
 // Pass server through middleware file
 configureMiddleware(server);
 
@@ -22,6 +24,8 @@ const projectName = process.env.PROJECT_NAME || "test";
 server.get("/", (req, res) => {
   res.send(`The ${projectName} server is up and running!`);
 });
+
+server.use("/auth", authRoutes)
 
 // Server export to be used in index.js
 module.exports = server;
