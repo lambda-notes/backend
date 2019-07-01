@@ -10,6 +10,10 @@ router.get('/github', passport.authenticate('github'));
 //   res.send('THIS WORKS');
 // });
 
+router.get('/test', (req, res) => {
+  res.send(process.env.GITHUB_CLIENT_ID, process.env.GITHUB_CLIENT_SECRET);
+});
+
 router.get(
   '/github/callback',
   passport.authenticate('github', { failureRedirect: '/login' }),
