@@ -1,27 +1,28 @@
 const express = require('express');
 const Users = require('./usersModel.js');
-const bcrypt = require('bcryptjs');
 
-// Creates router for specific API route for import in server.js
 const router = express.Router();
 
 // Get all users request
 router.get('/', async (req, res) => {
   try {
-    const users = await Users.find().select('id', 'username');
+    const users = await Users.find();
     if (users.length) {
       res.status(200).json({
-        message: 'The users were found in the database',
+        error: false,
+        message: 'The users were found successfully.',
         users
       });
     } else {
-      res
-        .status(404)
-        .json({ message: 'The users could not be found in the database.' });
+      res.status(404).json({
+        error: true,
+        message: 'The users could not be found.'
+      });
     }
   } catch (error) {
     res.status(500).json({
-      message: 'There was an error retrieving the users from the database.',
+      error: true,
+      message: 'There was an error finding the users.',
       error
     });
   }
@@ -30,20 +31,22 @@ router.get('/', async (req, res) => {
 // Get users by id request
 router.get('/:id', async (req, res) => {
   try {
-    const user = await Users.findById(req.params.id).select('id', 'username');
+    const user = await Users.findById(req.params.id);
     if (user) {
       res.status(200).json({
-        message: 'The user was retrieved successfully.',
+        error: false,
+        message: 'The user was found successfully.',
         user
       });
     } else {
       res
         .status(404)
-        .json({ message: 'The user could not be found in the database.' });
+        .json({ error: true, message: 'The user could not be found.' });
     }
   } catch (error) {
     res.status(500).json({
-      message: 'There was an error retrieving the users from the database.',
+      error: true,
+      message: 'There was an error finding the user.',
       error
     });
   }
@@ -77,31 +80,39 @@ router.get('/:id', async (req, res) => {
 
 // Update individual user request
 router.put('/:id', async (req, res) => {
-  if (!req.body.username || !req.body.password) {
-    res.status(404).json({ message: 'Please include a name and try again.' });
-  }
   try {
-    const newUserInfo = req.body;
-    const hash = bcrypt.hashSync(newUserInfo.password, 14);
-    newUserInfo.password = hash;
+    // Pull immutable version of user object from request
+    const newUserInfo = Object.assign({}, req.body);
+
+    // Find current user data
+    const userObj = await Users.findById(req.params.id);
+
+    // Update any included user information
+    if (newUserInfo.firstName) userObj.firstName = newUserInfo.firstName;
+    if (newUserInfo.lastName) userObj.lastName = newUserInfo.lastName;
+    if (newUserInfo.accountType) userObj.accountType = newUserInfo.accountType;
+    if (newUserInfo.githubID) userObj.githubID = newUserInfo.githubID;
+    if (newUserInfo.cohortID) userObj.cohortID = newUserInfo.cohortID;
+
+    // Insert new user object into database
     const user = await Users.update(req.params.id, newUserInfo);
+
     if (user) {
-      const users = await Users.find().where({
-        username: newUserInfo.username
-      });
       res.status(200).json({
+        error: false,
         message: 'The user was updated successfully.',
-        numUpdate: user,
-        users
+        user: userObj
       });
     } else {
-      res
-        .status(404)
-        .json({ message: 'The user could not be updated in the databse.' });
+      res.status(404).json({
+        error: false,
+        message: 'The user could not be updated.'
+      });
     }
   } catch (error) {
     res.status(500).json({
-      message: 'There was an error updating the user in the database.',
+      error: false,
+      message: 'There was an error updating the user.',
       error
     });
   }
@@ -113,17 +124,19 @@ router.delete('/:id', async (req, res) => {
     const deletedUser = await Users.remove(req.params.id);
     if (deletedUser) {
       res.status(200).json({
-        message: 'User was deleted successfully.',
-        numDeleted: deletedUser
+        error: false,
+        message: 'User was deleted successfully.'
       });
     } else {
-      res
-        .status(404)
-        .json({ message: 'The user could not be deleted in the database.' });
+      res.status(404).json({
+        error: true,
+        message: 'The user could not be deleted.'
+      });
     }
   } catch (error) {
     res.status(500).json({
-      message: 'There was an error while deleting the user in the database.',
+      error: true,
+      message: 'There was an error while deleting the user.',
       error
     });
   }
