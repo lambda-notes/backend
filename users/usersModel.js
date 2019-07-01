@@ -9,13 +9,22 @@ module.exports = {
 };
 
 function find() {
-  return db('users');
+  return db('users as u')
+    .join('accountType as a', 'u.accountType', 'a.id')
+    .join('cohorts as c', 'u.cohortID', 'c.id')
+    .select(
+      'u.id',
+      'u.firstName',
+      'u.lastName',
+      'u.accountType as accountTypeID',
+      'a.accountType',
+      'u.cohortID',
+      'c.cohortName'
+    );
 }
 
 function findById(id) {
-  return db('users')
-    .where({ id })
-    .first();
+  return db('users').where({ id });
 }
 
 function insert(creds) {

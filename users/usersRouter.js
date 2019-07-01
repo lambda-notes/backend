@@ -8,20 +8,23 @@ const router = express.Router();
 // Get all users request
 router.get('/', async (req, res) => {
   try {
-    const users = await Users.find().select('id', 'username');
+    const users = await Users.find();
     if (users.length) {
       res.status(200).json({
-        message: 'The users were found in the database',
+        error: false,
+        message: 'The users were found successfully.',
         users
       });
     } else {
-      res
-        .status(404)
-        .json({ message: 'The users could not be found in the database.' });
+      res.status(404).json({
+        error: true,
+        message: 'The users could not be found.'
+      });
     }
   } catch (error) {
     res.status(500).json({
-      message: 'There was an error retrieving the users from the database.',
+      error: true,
+      message: 'There was an error finding the users.',
       error
     });
   }
@@ -30,20 +33,22 @@ router.get('/', async (req, res) => {
 // Get users by id request
 router.get('/:id', async (req, res) => {
   try {
-    const user = await Users.findById(req.params.id).select('id', 'username');
+    const user = await Users.findById(req.params.id);
     if (user) {
       res.status(200).json({
-        message: 'The user was retrieved successfully.',
+        error: false,
+        message: 'The user was found successfully.',
         user
       });
     } else {
       res
         .status(404)
-        .json({ message: 'The user could not be found in the database.' });
+        .json({ error: true, message: 'The user could not be found.' });
     }
   } catch (error) {
     res.status(500).json({
-      message: 'There was an error retrieving the users from the database.',
+      error: true,
+      message: 'There was an error finding the user.',
       error
     });
   }
