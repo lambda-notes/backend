@@ -3,7 +3,9 @@ const Notes = require('./notesModel.js');
 
 const router = express.Router();
 
+
 // Get all notes request
+
 router.get('/', async (req, res) => {
   try {
     const notes = await Notes.findAllNotes();
@@ -71,12 +73,14 @@ router.get('/note/:id', async (req, res) => {
         message: 'The note could not be found.',
         notes: {}
       });
+
     }
   } catch (error) {
     res.status(500).json({
       error: true,
       message: 'There was an error finding the note.',
       notes: {}
+
     });
   }
 });
