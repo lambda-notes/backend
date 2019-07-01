@@ -86,10 +86,11 @@ router.post('/', async (req, res) => {
   try {
     const newNote = await Notes.insert(req.body);
     if (newNote) {
+      const note = await Notes.findByNoteId(newNote);
       res.status(200).json({
         error: false,
         message: 'The note was created successfully.',
-        note: newNote
+        note
       });
     } else {
       res.status(404).json({

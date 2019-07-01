@@ -30,6 +30,7 @@ function findById(id) {
   return db('users as u')
     .join('accountType as a', 'u.accountType', 'a.id')
     .join('cohorts as c', 'u.cohortID', 'c.id')
+    .join('track as t', 't.id', 'u.trackId')
     .select(
       'u.id',
       'u.firstName',
@@ -37,7 +38,9 @@ function findById(id) {
       'u.accountType as accountTypeID',
       'a.accountType',
       'u.cohortID',
-      'c.cohortName'
+      'c.cohortName',
+      'u.trackID',
+      't.trackName'
     )
     .where(`u.id`, id)
     .first();

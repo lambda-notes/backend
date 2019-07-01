@@ -24,7 +24,6 @@ function findByUserId(userID) {
 }
 
 function insert(note) {
-  console.log('Working!');
   return db('notes')
     .insert(note)
     .then(newNote => newNote);
