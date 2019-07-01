@@ -1,63 +1,64 @@
-require("dotenv").config();
+require('dotenv').config();
 
-// Postgres imports
-const pg = require("pg");
-pg.defaults.ssl = true;
-
-// Production database connection
-const dbConnection = process.env.DATABASE_URL || localPgConnection;
-
-// Postgres configurations
-// Command for running postgres locally:
-// knex migrate:latest --env production
-// knex seed:run --env production
 module.exports = {
-  development: {
-    client: "pg",
-    connection: dbConnection,
-    migrations: {
-      directory: "./database/migrations",
-      tablename: "knex_migrations"
+    development: {
+        client: 'mysql',
+        connection: {
+            host: process.env.DATABASE_URL_DEV,
+            user: process.env.DATABASE_USER_DEV,
+            port: process.env.DATABASE_PORT_DEV,
+            password: process.env.DATABASE_PASSWORD_DEV,
+            database: process.env.DATABASE_NAME_DEV
+        },
+        migrations: {
+            directory: './database/migrations',
+            tablename: 'knex_migrations'
+        },
+        seeds: {
+            directory: './database/seeds'
+        },
+        pool: {
+            min: 2,
+            max: 10
+        },
+        useNullAsDefault: true
     },
-    seeds: {
-      directory: "./database/seeds"
-    },
-    pool: {
-      min: 2,
-      max: 10
-    },
-    useNullAsDefault: true
-  },
 
-  testing: {
-    client: "sqlite3",
-    connection: {
-      filename: "./database/test.db3"
+    testing: {
+        client: 'mysql',
+        connection: {
+            filename: './database/test.db3'
+        },
+        useNullAsDefault: true,
+        migrations: {
+            directory: './database/migrations'
+        },
+        seeds: {
+            directory: './database/seeds'
+        },
+        useNullAsDefault: true
     },
-    useNullAsDefault: true,
-    migrations: {
-      directory: "./database/migrations"
-    },
-    seeds: {
-      directory: "./database/seeds"
-    },
-    useNullAsDefault: true
-  },
 
-  production: {
-    client: "pg",
-    connection: dbConnection,
-    pool: {
-      min: 2,
-      max: 10
-    },
-    migrations: {
-      directory: "./database/migrations",
-      tableName: "knex_migrations"
-    },
-    seeds: {
-      directory: "./database/seeds"
-    },
-    useNullAsDefault: true
-  }
+    production: {
+        client: 'mysql',
+        connection: {
+            host: process.env.DATABASE_URL_DEV,
+            user: process.env.DATABASE_USER_DEV,
+            port: process.env.DATABASE_PORT_DEV,
+            password: process.env.DATABASE_PASSWORD_DEV,
+            database: process.env.DATABASE_NAME_DEV
+        },
+        pool: {
+            min: 2,
+            max: 10
+        },
+        migrations: {
+            directory: './database/migrations',
+            tableName: 'knex_migrations'
+        },
+        seeds: {
+            directory: './database/seeds'
+        },
+        useNullAsDefault: true
+    }
 };
