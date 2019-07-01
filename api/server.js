@@ -1,6 +1,6 @@
 // Import dependencies and general middleware
-const express = require("express");
-const configureMiddleware = require("./middleware.js");
+const express = require('express');
+const configureMiddleware = require('./middleware.js');
 const server = express();
 
 const authRoutes = require("./routes/AuthRoutes");
@@ -9,20 +9,20 @@ const authRoutes = require("./routes/AuthRoutes");
 configureMiddleware(server);
 
 // Custom restricted middleware import
-const restricted = require("../auth/restricted.js");
+const restricted = require('../auth/restricted.js');
 
 // Import various split API routes
-const usersRouter = require("../users/usersRouter.js");
-const authRouter = require("../auth/authRouter.js");
+const usersRouter = require('../users/usersRouter.js');
+const authRouter = require('../auth/authRouter.js');
 
 // Router assignments
-server.use("/api/restricted/users", restricted, usersRouter);
-server.use("/api/auth", authRouter);
+server.use('/api/restricted/users', restricted, usersRouter);
+server.use('/api/auth', authRouter);
 
 // Generic / route for initial server online status check
-const projectName = process.env.PROJECT_NAME || "test";
-server.get("/", (req, res) => {
-  res.send(`The ${projectName} server is up and running!`);
+const projectName = process.env.PROJECT_NAME || 'test';
+server.get('/', (req, res) => {
+  res.send(`The ${projectName} server is up and running! 🔥🔥🔥`);
 });
 
 server.use("/auth", authRoutes)
