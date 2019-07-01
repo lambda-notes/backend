@@ -1,5 +1,6 @@
 // Import dependencies and general middleware
 const express = require('express');
+const multer = require('multer');
 const configureMiddleware = require('./middleware.js');
 const server = express();
 
