@@ -13,10 +13,12 @@ const restricted = require('../auth/restricted.js');
 
 // Import various split API routes
 const usersRouter = require('../users/usersRouter.js');
+const notesRouter = require('../notes/notesRouter.js');
 const authRouter = require('../auth/authRouter.js');
 
 // Router assignments
 server.use('/api/restricted/users', usersRouter);
+server.use('/api/restricted/notes', notesRouter);
 server.use('/api/auth', authRouter);
 
 // Generic / route for initial server online status check
