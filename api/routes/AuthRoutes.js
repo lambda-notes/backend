@@ -2,12 +2,23 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 
-// ROUTE:   GET auth/users/google
+// ROUTE:   GET auth/users/github
 // DESC:    Allow users to authenticate with github
 // ACCESS:  Public
 router.get('/github', passport.authenticate('github'));
+// router.get('/github', (req, res) => {
+//   res.send('THIS WORKS');
+// });
 
-// ROUTE:   GET auth/google/redirect
+router.get(
+  '/github/callback',
+  passport.authenticate('github', { failureRedirect: '/login' }),
+  function(req, res) {
+    res.redirect(`/`);
+  }
+);
+
+// ROUTE:   GET auth/github/redirect
 // ACCESS:  Public
 
 router.get('/github/redirect', passport.authenticate('github'), (req, res) => {
@@ -18,14 +29,6 @@ router.get('/github/redirect', passport.authenticate('github'), (req, res) => {
     `https://lambda-notes-hackathon.netlify.com?token=${token}&id=${id}`
   );
 });
-
-router.get(
-  '/auth/github/callback',
-  passport.authenticate('github', { failureRedirect: '/login' }),
-  function(req, res) {
-    res.redirect('/');
-  }
-);
 
 router.get('/logout', (req, res) => {
   req.logout();
