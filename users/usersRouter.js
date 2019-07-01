@@ -1,6 +1,5 @@
 const express = require('express');
 const Users = require('./usersModel.js');
-const bcrypt = require('bcryptjs');
 
 const router = express.Router();
 
@@ -81,31 +80,39 @@ router.get('/:id', async (req, res) => {
 
 // Update individual user request
 router.put('/:id', async (req, res) => {
-  if (!req.body.username || !req.body.password) {
-    res.status(404).json({ message: 'Please include a name and try again.' });
-  }
   try {
-    const newUserInfo = req.body;
-    const hash = bcrypt.hashSync(newUserInfo.password, 14);
-    newUserInfo.password = hash;
+    // Pull immutable version of user object from request
+    const newUserInfo = Object.assign({}, req.body);
+
+    // Find current user data
+    const userObj = await Users.findById(req.params.id);
+
+    // Update any included user information
+    if (newUserInfo.firstName) userObj.firstName = newUserInfo.firstName;
+    if (newUserInfo.lastName) userObj.lastName = newUserInfo.lastName;
+    if (newUserInfo.accountType) userObj.accountType = newUserInfo.accountType;
+    if (newUserInfo.githubID) userObj.githubID = newUserInfo.githubID;
+    if (newUserInfo.cohortID) userObj.cohortID = newUserInfo.cohortID;
+
+    // Insert new user object into database
     const user = await Users.update(req.params.id, newUserInfo);
+
     if (user) {
-      const users = await Users.find().where({
-        username: newUserInfo.username
-      });
       res.status(200).json({
+        error: false,
         message: 'The user was updated successfully.',
-        numUpdate: user,
-        users
+        user: userObj
       });
     } else {
-      res
-        .status(404)
-        .json({ message: 'The user could not be updated in the databse.' });
+      res.status(404).json({
+        error: false,
+        message: 'The user could not be updated.'
+      });
     }
   } catch (error) {
     res.status(500).json({
-      message: 'There was an error updating the user in the database.',
+      error: false,
+      message: 'There was an error updating the user.',
       error
     });
   }
