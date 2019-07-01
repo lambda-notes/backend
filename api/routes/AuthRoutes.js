@@ -2,10 +2,12 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 
-router.get('/github', passport.authenticate('github'));
-
 // ROUTE:   GET auth/users/google
 // DESC:    Allow users to authenticate with github
+// ACCESS:  Public
+router.get('/github', passport.authenticate('github'));
+
+// ROUTE:   GET auth/google/redirect
 // ACCESS:  Public
 
 router.get('/github/redirect', passport.authenticate('github'), (req, res) => {
@@ -13,7 +15,7 @@ router.get('/github/redirect', passport.authenticate('github'), (req, res) => {
   let token = req.user.token;
   res.cookie('auth', token);
   res.redirect(
-    `https://lambda-school-notes.herokuapp.com?token=${token}&id=${id}`
+    `https://lambda-notes-hackathon.netlify.com?token=${token}&id=${id}`
   );
 });
 
@@ -24,5 +26,11 @@ router.get(
     res.redirect('/');
   }
 );
+
+router.get('/logout', (req, res) => {
+  req.logout();
+  req.session.destroy;
+  res.redirect('https://lambda-notes-hackathon.netlify.com/');
+});
 
 module.exports = router;
