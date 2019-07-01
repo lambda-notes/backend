@@ -82,7 +82,14 @@ router.get('/note/:id', async (req, res) => {
   }
 });
 
+// Create new notes request
 router.post('/', async (req, res) => {
+  if (!req.body.notesLessonID || !req.body.userID) {
+    return res.status(500).json({
+      error: true,
+      message: 'Please include the required information and try again.'
+    });
+  }
   try {
     const newNote = await Notes.insert(req.body);
     if (newNote) {
@@ -100,7 +107,6 @@ router.post('/', async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       error: true,
       message: 'There was an error creating the note.',
@@ -108,5 +114,8 @@ router.post('/', async (req, res) => {
     });
   }
 });
+
+// Update note request
+router.put('/:id', async (req, res) => {});
 
 module.exports = router;
