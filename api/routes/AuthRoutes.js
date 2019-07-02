@@ -6,6 +6,7 @@ require('dotenv').config();
 // DESC:    Allow users to authenticate with github
 // ACCESS:  Public
 router.get('/github', passport.authenticate('github'));
+
 // router.get('/github', (req, res) => {
 //   res.send('THIS WORKS');
 // });
