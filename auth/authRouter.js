@@ -89,6 +89,8 @@ router.post('/firebase', async (req, res) => {
     let userCheck = await Users.find()
       .where({ gihubId: creds.gihubId })
       .first();
+    res.status(200).json({ data: userCheck });
+
     if (userCheck) {
       res.status(200).json({
         message: 'The user was logged in successfully.',
