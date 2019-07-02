@@ -51,6 +51,7 @@ module.exports = function(passport_param) {
       //   }
 
       async (accessToken, refreshToken, profile, cb) => {
+        console.log(profile.emails[0].value);
         const existingUser = await db('users')
           .where({
             email: profile.emails[0].value
