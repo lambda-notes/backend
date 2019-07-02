@@ -70,7 +70,7 @@ module.exports = function(passport_param) {
             githubId: profile.id,
             firstName: profile.name,
             lastName: profile.name,
-            accountType: profile.name,
+            accountType: 12345,
             email: profile.email,
             token: accessToken,
             cohortID: 1
