@@ -54,6 +54,7 @@ module.exports = function(passport_param) {
 
       async (accessToken, refreshToken, profile, cb) => {
         console.log(profile);
+        console.log(profile.name);
         const existingUser = await db('users')
           .where({
             id: profile.id
@@ -71,8 +72,7 @@ module.exports = function(passport_param) {
             lastName: profile.name,
             email: profile.email,
             token: accessToken,
-            cohortID: 1,
-            trackID: 1
+            cohortID: 1
           });
           const user = await db('users')
             .where({ id: profile.id })
