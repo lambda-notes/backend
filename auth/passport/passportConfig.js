@@ -26,11 +26,11 @@ function generateToken(id) {
   const payload = {
     subject: id
   };
-  const options = {
-    expiresIn: '1d'
-  };
+  //   const options = {
+  //     expiresIn: '1d'
+  //   };
   const secret = 'this is a secret';
-  return jwt.sign(payload, options.toObject(), secret);
+  return jwt.sign(payload, { expiresIn: '1d' }, secret);
 }
 
 ///////////////////////////////////////////////////////
