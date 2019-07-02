@@ -59,11 +59,11 @@ module.exports = function(passport_param) {
           })
           .first();
         if (existingUser) {
-          let accessToken = generateToken.generateToken(existingUser.id);
+          let accessToken = generateToken(existingUser.id);
           existingUser.token = accessToken;
           done(null, existingUser); // supplies passport with the user that has authenticated
         } else {
-          let accessToken = generateToken.generateToken(profile.id);
+          let accessToken = generateToken(profile.id);
           await db('users').insert({
             githubId: profile.id,
             firstName: profile.name.givenName,
