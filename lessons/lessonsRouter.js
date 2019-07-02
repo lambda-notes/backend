@@ -55,4 +55,74 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+router.post('/', async (req, res) => {
+  if (
+    !req.body.lessonName ||
+    !req.body.lessonsCohortID ||
+    !req.body.lessonsTrackID
+  ) {
+    res.status(500).json({
+      error: true,
+      message: 'Please include the required information and try again.'
+    });
+  }
+  try {
+    const createLesson = await Lessons.insert(req.body);
+    if (createLesson) {
+      const lesson = await Lessons.findById(createLesson);
+      res.status(200).json({
+        error: false,
+        message: 'The lesson was created successfully.',
+        lesson
+      });
+    } else {
+      res.status(404).json({
+        error: true,
+        message: 'The lesson could not be created.',
+        lesson: {}
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      error: true,
+      message: 'There was an error creating the lesson.',
+      lesson: {}
+    });
+  }
+});
+
+router.put('/:id', async (req, res) => {
+  if (!req.body) {
+    return res.status(500).json({
+      error: true,
+      message: 'Please include information to update and try again.',
+      lesson: {}
+    });
+  }
+  try {
+    console.log('Working!');
+    const lesson = await Lessons.update(req.body, req.params.id);
+    if (lesson) {
+      const updatedLesson = await Lessons.findById(req.params.id);
+      res.status(200).json({
+        error: false,
+        message: 'The lesson was updated successfully.',
+        updatedLesson
+      });
+    } else {
+      res.status(404).json({
+        error: false,
+        message: 'The lesson could not be upated.',
+        lesson: {}
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      error: true,
+      message: 'There was an error updating the lesson.',
+      lesson: {}
+    });
+  }
+});
+
 module.exports = router;

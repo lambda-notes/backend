@@ -18,14 +18,18 @@ function findById(id) {
     .first();
 }
 
-function insert() {
-  // Finish
+function insert(lesson) {
+  return db('lessons')
+    .insert(lesson)
+    .then(lessonID => lessonID);
+}
+
+function update(changes, id) {
+  return db('lessons')
+    .where({ id })
+    .update(changes);
 }
 
 function remove() {
-  // Finish
-}
-
-function update() {
   // Finish
 }
