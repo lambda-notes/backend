@@ -31,7 +31,6 @@ server.use('/api/restricted/lessons', lessonsRouter);
 server.use('/api/restricted/videos', videosRouter);
 server.use('/api/restricted/tracks', trackRouter);
 server.use('/api/restricted/cohorts', cohortsRouter);
-server.use('/api/auth', authRouter);
 
 // Generic / route for initial server online status check
 const projectName = process.env.PROJECT_NAME || 'test';
