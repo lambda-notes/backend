@@ -49,8 +49,6 @@ module.exports = function(passport_param) {
       //     });
       //   }
 
-      //https://lambda-notes-hackathon.netlify.com/auth/github/redirect?code=c6fe0432004894630bdf
-
       async (accessToken, refreshToken, profile, cb) => {
         const existingUser = await db('users')
           .where({

@@ -50,34 +50,14 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Create user request is a duplicate of register but is here in case it's needed
-// router.post("/", async (req, res) => {
-//   if (!req.body.name) {
-//     return res
-//       .status(404)
-//       .json({ message: "Please include a name and try again." });
-//   }
-//   try {
-//     const newUser = await User.insert(req.body);
-//     if (newUser) {
-//       res.status(200).json({
-//         message: "The new user was created in the database",
-//         newUser
-//       });
-//     } else {
-//       res
-//         .status(404)
-//         .json({ message: "The user could not be created in the database." });
-//     }
-//   } catch (error) {
-//     res.status(500).json({
-//       message: "There was an error creating the user in the database."
-//     });
-//   }
-// });
-
 // Update individual user request
 router.put('/:id', async (req, res) => {
+  if (!req.body) {
+    return res.status(500).json({
+      error: true,
+      message: 'Please include information to upate and try again.'
+    });
+  }
   try {
     // Pull immutable version of user object from request
     const newUserInfo = Object.assign({}, req.body);
