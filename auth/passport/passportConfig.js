@@ -48,6 +48,7 @@ module.exports = function(passport_param) {
       //     return cb(err, user);
       //   });
       // }
+      
       async (accessToken, refreshToken, profile, cb) => {
         const existingUser = await db('users')
           .where({

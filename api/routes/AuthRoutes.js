@@ -1,11 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
-
+require('dotenv').config();
 // ROUTE:   GET auth/users/github
 // DESC:    Allow users to authenticate with github
 // ACCESS:  Public
 router.get('/github', passport.authenticate('github'));
+
+router.get('/test', (req, res) => {
+  res.send(process.env.GITHUB_CLIENT_ID, process.env.GITHUB_CLIENT_SECRET);
+  console.log(process.env.GITHUB_CLIENT_ID, process.env.GITHUB_CLIENT_SECRET);
+});
 
 router.get(
   '/github/callback',
