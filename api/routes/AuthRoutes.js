@@ -1,11 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
-require('dotenv').config();
+// require('dotenv').config();
 // ROUTE:   GET auth/users/github
 // DESC:    Allow users to authenticate with github
 // ACCESS:  Public
-router.get('/github', passport.authenticate('github'));
+router.get(
+  '/github',
+  passport.authenticate('github', {
+    scope: ['profile', 'email']
+  })
+);
 
 router.get(
   '/github/callback',
