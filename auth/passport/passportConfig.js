@@ -42,13 +42,13 @@ module.exports = function(passport_param) {
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
         callbackURL:
           process.env.GITHUB_CALLBACK_URL ||
-          'https://lambda-notes-hackathon.netlify.com/auth/github/redirect/auth/github/redirect'
+          'https://lambda-notes-hackathon.netlify.com/auth/github/callback'
       },
-      //   function(accessToken, refreshToken, profile, cb) {
-      //     User.findOrCreate({ githubId: profile.id }, function(err, user) {
-      //       return cb(err, user);
-      //     });
-      //   }
+      // function(accessToken, refreshToken, profile, cb) {
+      //   User.findOrCreate({ githubId: profile.id }, function(err, user) {
+      //     return cb(err, user);
+      //   });
+      // }
 
       async (accessToken, refreshToken, profile, cb) => {
         const existingUser = await db('users')
@@ -69,7 +69,9 @@ module.exports = function(passport_param) {
             firstName: profile.name.givenName,
             lastName: profile.name.familyName,
             email: profile.emails[0].value,
-            token: accessToken
+            token: accessToken,
+            cohortID: 1,
+            trackID: 1
           });
           const user = await db('users')
             .where({ email: profile.emails[0].value })
