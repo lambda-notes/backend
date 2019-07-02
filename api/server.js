@@ -2,6 +2,7 @@
 const express = require('express');
 const configureMiddleware = require('./middleware.js');
 const server = express();
+
 // passport auth
 const passport = require('passport');
 require('../auth/passport/passportConfig')(passport);
