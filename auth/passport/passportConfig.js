@@ -40,7 +40,7 @@ module.exports = function(passport_param) {
       {
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        scope: ['user.email'],
+        scope: ['user:id'],
         callbackURL:
           process.env.GITHUB_CALLBACK_URL ||
           'https://lambda-school-notes.herokuapp.com/auth/github/redirect'
@@ -55,28 +55,26 @@ module.exports = function(passport_param) {
         console.log(profile);
         const existingUser = await db('users')
           .where({
-            email: profile.emails[0].value
+            id: profile.id
           })
           .first();
         if (existingUser) {
-          let accessToken = generateToken.generateToken(existingUser.email);
+          let accessToken = generateToken.generateToken(existingUser.id);
           existingUser.token = accessToken;
           done(null, existingUser); // supplies passport with the user that has authenticated
         } else {
-          let accessToken = generateToken.generateToken(
-            profile.emails[0].value
-          );
+          let accessToken = generateToken.generateToken(profile.id);
           await db('users').insert({
             githubId: profile.id,
             firstName: profile.name.givenName,
             lastName: profile.name.familyName,
-            email: profile.emails[0].value,
+            email: profile.email,
             token: accessToken,
             cohortID: 1,
             trackID: 1
           });
           const user = await db('users')
-            .where({ email: profile.emails[0].value })
+            .where({ id: profile.id })
             .first();
           done(null, user);
         }
