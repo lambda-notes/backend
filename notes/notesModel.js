@@ -26,11 +26,14 @@ function findByUserId(userID) {
 function insert(note) {
   return db('notes')
     .insert(note)
-    .then(newNote => newNote);
+    .then(newNote => newNote.RowDataPacket);
 }
 
-function update(updatedNote) {
-  // Finish
+function update(changes, id) {
+  console.log('Working');
+  return db('notes')
+    .where({ id })
+    .update(changes);
 }
 
 function remove(id) {

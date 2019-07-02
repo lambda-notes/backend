@@ -116,6 +116,55 @@ router.post('/', async (req, res) => {
 });
 
 // Update note request
-router.put('/:id', async (req, res) => {});
+router.put('/:id', async (req, res) => {
+  if (!req.body.noteTitle || !req.body.note) {
+    return res.status(500).json({
+      error: true,
+      message: 'Please include information to upate and try again.'
+    });
+  }
+  try {
+    // Pull out new note
+    const currentNote = await Notes.findByNoteId(req.params.id);
+
+    if (currentNote) {
+      // Update any existing information and change updated date
+      if (req.body.notesTitle) currentNote.notesTitle = req.body.notesTitle;
+      if (req.body.note) currentNote.note = req.body.note;
+      if (req.body.note || req.body.noteTitle)
+        currentNote.dateUpated = Date.now();
+
+      console.log(currentNote);
+      // Insert new updated note into database
+      const note = await Notes.update(currentNote, req.params.id);
+
+      if (note) {
+        res.status(200).json({
+          error: false,
+          message: 'The note was updated successfully.',
+          note
+        });
+      } else {
+        res.status(500).json({
+          error: true,
+          message: 'There was an error updating the note.',
+          notes: {}
+        });
+      }
+    } else {
+      res.status(500).json({
+        error: true,
+        message: 'There was an error updating the note.',
+        notes: {}
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      error: true,
+      message: 'There was an error updating the note.',
+      notes: {}
+    });
+  }
+});
 
 module.exports = router;
