@@ -82,6 +82,30 @@ router.post('/login', async (req, res) => {
   }
 });
 
+router.post('/firebase', async (req, res) => {
+  let creds = req.body;
+  try {
+    let userCheck = await Users.find()
+      .where({ uid: creds.uid })
+      .first();
+    if (userCheck) {
+      res.status(200).json({
+        message: 'The user was logged in successfully.'
+      });
+    } else {
+      let response = Users.insert(creds);
+      if (response) {
+        res.status(200).json({
+          message: 'The user was registered and logged in successfully.'
+        });
+      }
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: 'There was a problem with your request.'
+    });
+  }
+});
 // Logout process is destroying token on front-end
 
 module.exports = router;

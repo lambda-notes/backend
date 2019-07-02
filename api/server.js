@@ -6,6 +6,8 @@ const server = express();
 // passport auth
 const passport = require('passport');
 require('../auth/passport/passportConfig')(passport);
+server.use(passport.initialize());
+server.use(passport.session());
 
 const authRoutes = require('./routes/AuthRoutes');
 

@@ -1,6 +1,6 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const secret = process.env.JWT_SECRET;
+// const secret = process.env.JWT_SECRET;
 const db = require('../../database/dbConfig');
 const passport = require('passport');
 const GitHubStrategy = require('passport-github2').Strategy;
@@ -29,7 +29,8 @@ function generateToken(id) {
   const options = {
     expiresIn: '1d'
   };
-  return jwt.sign(payload, options, secret);
+  const secret = 'this is a secret';
+  return jwt.sign(payload, secret, options);
 }
 
 ///////////////////////////////////////////////////////
@@ -40,41 +41,41 @@ module.exports = function(passport_param) {
       {
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        scope: ['user:id'],
         callbackURL:
           process.env.GITHUB_CALLBACK_URL ||
-          'https://lambda-notes-hackathon.netlify.com/auth/github/callback'
+          'https://lambda-school-notes.herokuapp.com/auth/github/redirect'
       },
-      // function(accessToken, refreshToken, profile, cb) {
-      //   User.findOrCreate({ githubId: profile.id }, function(err, user) {
-      //     return cb(err, user);
-      //   });
-      // }
+      //   function(accessToken, refreshToken, profile, cb) {
+      //     User.findOrCreate({ githubId: profile.id }, function(err, user) {
+      //       return cb(err, user);
+      //     });
+      //   }
 
       async (accessToken, refreshToken, profile, cb) => {
+        console.log(profile);
+        console.log(profile.name);
         const existingUser = await db('users')
           .where({
-            email: profile.emails[0].value
+            id: profile.id
           })
           .first();
         if (existingUser) {
-          let accessToken = generateToken.generateToken(existingUser.email);
+          let accessToken = generateToken(existingUser.id);
           existingUser.token = accessToken;
           done(null, existingUser); // supplies passport with the user that has authenticated
         } else {
-          let accessToken = generateToken.generateToken(
-            profile.emails[0].value
-          );
+          let accessToken = generateToken(profile.id);
           await db('users').insert({
             githubId: profile.id,
-            firstName: profile.name.givenName,
-            lastName: profile.name.familyName,
-            email: profile.emails[0].value,
+            firstName: profile.name,
+            lastName: profile.name,
+            email: profile.email,
             token: accessToken,
-            cohortID: 1,
-            trackID: 1
+            cohortID: 1
           });
           const user = await db('users')
-            .where({ email: profile.emails[0].value })
+            .where({ id: profile.id })
             .first();
           done(null, user);
         }

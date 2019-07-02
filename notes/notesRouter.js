@@ -154,9 +154,11 @@ router.delete('/:id', async (req, res) => {
   try {
     const deletedNote = await Notes.remove(req.params.id);
     if (deletedNote) {
-      res
-        .status(200)
-        .json({ error: false, message: 'The note was deleted successfully.' });
+      res.status(200).json({
+        error: false,
+        message: 'The note was deleted successfully.',
+        id: req.params.id
+      });
     } else {
       res.status(500).json({
         error: true,
