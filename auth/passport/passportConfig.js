@@ -49,6 +49,7 @@ module.exports = function(passport_param) {
       //       return cb(err, user);
       //     });
       //   }
+
       async (accessToken, refreshToken, profile, cb) => {
         const existingUser = await db('users')
           .where({
@@ -68,7 +69,9 @@ module.exports = function(passport_param) {
             firstName: profile.name.givenName,
             lastName: profile.name.familyName,
             email: profile.emails[0].value,
-            token: accessToken
+            token: accessToken,
+            cohortID: 1,
+            trackID: 1
           });
           const user = await db('users')
             .where({ email: profile.emails[0].value })
