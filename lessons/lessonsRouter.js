@@ -91,6 +91,7 @@ router.post('/', async (req, res) => {
   }
 });
 
+// Update lesson by ID request
 router.put('/:id', async (req, res) => {
   if (!req.body) {
     return res.status(500).json({
@@ -111,7 +112,7 @@ router.put('/:id', async (req, res) => {
       });
     } else {
       res.status(404).json({
-        error: false,
+        error: true,
         message: 'The lesson could not be upated.',
         lesson: {}
       });
@@ -121,6 +122,29 @@ router.put('/:id', async (req, res) => {
       error: true,
       message: 'There was an error updating the lesson.',
       lesson: {}
+    });
+  }
+});
+
+// Delete lesson by ID request
+router.delete('/:id', async (req, res) => {
+  try {
+    const deleted = await Lessons.remove(req.params.id);
+    if (deleted) {
+      res.status(200).json({
+        error: false,
+        message: 'The lesson was deleted successfully.'
+      });
+    } else {
+      res.status(404).json({
+        error: true,
+        message: 'The lesson could not be deleted.'
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      error: true,
+      message: 'There was an error deleting the lesson.'
     });
   }
 });
