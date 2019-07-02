@@ -30,7 +30,7 @@ function generateToken(id) {
     expiresIn: '1d'
   };
   const secret = 'this is a secret';
-  return jwt.sign(payload, options, secret);
+  return jwt.sign(payload, secret, options);
 }
 
 ///////////////////////////////////////////////////////
