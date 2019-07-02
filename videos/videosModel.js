@@ -24,13 +24,19 @@ function findByID(id) {
 }
 
 function insert(video) {
-  // Finish
+  return db('videos')
+    .insert(video)
+    .then(newNote => newNote);
 }
 
 function update(changes, id) {
-  // Finish
+  return db('videos')
+    .where({ id })
+    .update(changes);
 }
 
 function remove(id) {
-  // Finish
+  return db('videos')
+    .where({ id })
+    .del();
 }
