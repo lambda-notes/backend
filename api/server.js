@@ -14,10 +14,6 @@ configureMiddleware(server);
 // Custom restricted middleware import
 const restricted = require('../auth/restricted.js');
 
-// passport auth
-const passport = require('passport');
-require('../auth/passport/passportConfig')(passport);
-
 // Import various split API routes
 const usersRouter = require('../users/usersRouter.js');
 const notesRouter = require('../notes/notesRouter.js');

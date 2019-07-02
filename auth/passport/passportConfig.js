@@ -34,8 +34,8 @@ function generateToken(id) {
 
 ///////////////////////////////////////////////////////
 
-module.exports = function(passport) {
-  passport.use(
+module.exports = function(passport_param) {
+  passport_param.use(
     new GitHubStrategy(
       {
         clientID: process.env.GITHUB_CLIENT_ID,

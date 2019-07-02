@@ -7,15 +7,6 @@ require('dotenv').config();
 // ACCESS:  Public
 router.get('/github', passport.authenticate('github'));
 
-// router.get('/github', (req, res) => {
-//   res.send('THIS WORKS');
-// });
-
-router.get('/test', (req, res) => {
-  res.send(process.env.GITHUB_CLIENT_ID, process.env.GITHUB_CLIENT_SECRET);
-  console.log(process.env.GITHUB_CLIENT_ID, process.env.GITHUB_CLIENT_SECRET);
-});
-
 router.get(
   '/github/callback',
   passport.authenticate('github', { failureRedirect: '/login' }),
@@ -39,7 +30,7 @@ router.get('/github/redirect', passport.authenticate('github'), (req, res) => {
 router.get('/logout', (req, res) => {
   req.logout();
   req.session.destroy;
-  res.redirect('https://lambda-notes-hackathon.netlify.com/');
+  res.redirect('https://lambda-notes-hackathon.netlify.com');
 });
 
 module.exports = router;
