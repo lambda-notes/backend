@@ -67,8 +67,8 @@ module.exports = function(passport_param) {
           let accessToken = generateToken(profile.id);
           await db('users').insert({
             githubId: profile.id,
-            firstName: profile.name.givenName,
-            lastName: profile.name.familyName,
+            firstName: profile.name,
+            lastName: profile.name,
             email: profile.email,
             token: accessToken,
             cohortID: 1,
