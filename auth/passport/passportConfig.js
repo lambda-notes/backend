@@ -40,14 +40,15 @@ module.exports = function(passport_param) {
       {
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        callbackURL: process.env.GITHUB_CALLBACK_URL || '/auth/github/redirect'
+        callbackURL:
+          process.env.GITHUB_CALLBACK_URL ||
+          'https://lambda-notes-hackathon.netlify.com/auth/github/callback'
       },
       //   function(accessToken, refreshToken, profile, cb) {
       //     User.findOrCreate({ githubId: profile.id }, function(err, user) {
       //       return cb(err, user);
       //     });
       //   }
-
       async (accessToken, refreshToken, profile, cb) => {
         const existingUser = await db('users')
           .where({
