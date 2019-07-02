@@ -87,7 +87,7 @@ router.post('/firebase', async (req, res) => {
   console.log(creds);
   try {
     let userCheck = await Users.find()
-      .where({ uid: creds.uid })
+      .where({ gihubId: creds.gihubId })
       .first();
     if (userCheck) {
       res.status(200).json({
