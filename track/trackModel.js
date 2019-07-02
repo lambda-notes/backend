@@ -19,13 +19,19 @@ function findById(id) {
 }
 
 function insert(track) {
-  // Finish
+  return db('track')
+    .insert(track)
+    .then(ids => ids);
 }
 
 function update(changes, id) {
-  // Finish
+  return db('track')
+    .where({ id })
+    .update(changes);
 }
 
 function remove(id) {
-  // Finish
+  return db('track')
+    .where({ id })
+    .del();
 }
