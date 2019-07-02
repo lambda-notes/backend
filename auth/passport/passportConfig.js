@@ -52,7 +52,7 @@ module.exports = function(passport_param) {
       //     });
       //   }
 
-      async (accessToken, refreshToken, profile, cb) => {
+      async (accessToken, refreshToken, profile, done) => {
         console.log(profile);
         console.log(profile.name);
         const existingUser = await db('users')
