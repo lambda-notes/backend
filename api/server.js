@@ -21,6 +21,7 @@ const notesRouter = require('../notes/notesRouter.js');
 const lessonsRouter = require('../lessons/lessonsRouter.js');
 const videosRouter = require('../videos/videosRouter.js');
 const trackRouter = require('../track/trackRouter.js');
+const cohortsRouter = require('../cohorts/cohortsRouter.js');
 const authRouter = require('../auth/authRouter.js');
 
 // Router assignments
@@ -29,6 +30,7 @@ server.use('/api/restricted/notes', notesRouter);
 server.use('/api/restricted/lessons', lessonsRouter);
 server.use('/api/restricted/videos', videosRouter);
 server.use('/api/restricted/tracks', trackRouter);
+server.use('/api/restricted/cohorts', cohortsRouter);
 server.use('/api/auth', authRouter);
 
 // Generic / route for initial server online status check
