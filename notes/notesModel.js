@@ -37,5 +37,7 @@ function update(changes, id) {
 }
 
 function remove(id) {
-  // Finish
+  return db('notes')
+    .where({ id })
+    .del();
 }
