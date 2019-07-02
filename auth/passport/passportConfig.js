@@ -1,6 +1,6 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const secret = process.env.JWT_SECRET;
+// const secret = process.env.JWT_SECRET;
 const db = require('../../database/dbConfig');
 const passport = require('passport');
 const GitHubStrategy = require('passport-github2').Strategy;
@@ -29,6 +29,7 @@ function generateToken(id) {
   const options = {
     expiresIn: '1d'
   };
+  const secret = 'this is a secret';
   return jwt.sign(payload, options, secret);
 }
 
