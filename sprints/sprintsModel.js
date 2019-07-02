@@ -2,38 +2,36 @@ const db = require('../database/dbConfig.js');
 
 module.exports = {
   find,
-  findById,
+  findByCohortId,
   insert,
   remove,
   update
 };
 
 function find() {
-  return db('users');
+  return db('sprints');
 }
 
-function findById(id) {
-  return db('users')
-    .where({ id })
-    .first();
+function findByCohortId(id) {
+  return db('sprints').where({ cohortID: id });
 }
 
 // Finish all below this line later
 
 function insert(creds) {
-  return db('users')
+  return db('sprints')
     .insert(creds)
     .then(ids => ids);
 }
 
 function update(id, changes) {
-  return db('users')
+  return db('sprints')
     .where({ id })
     .update(changes);
 }
 
 function remove(id) {
-  return db('users')
+  return db('sprints')
     .where({ id })
     .del();
 }
