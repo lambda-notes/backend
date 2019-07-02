@@ -40,14 +40,9 @@ module.exports = function(passport_param) {
       {
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
-<<<<<<< HEAD
         callbackURL:
           process.env.GITHUB_CALLBACK_URL ||
-          'https://lambda-notes-hackathon.netlify.com/auth/github/callback'
-=======
-        callbackURL: process.env.GITHUB_CALLBACK_URL || '/auth/github/redirect'
-
->>>>>>> 123fccf218d6bb5aca4143d7d169db4932cb3cce
+          'https://lambda-notes-hackathon.netlify.com/auth/github/redirect'
       },
       //   function(accessToken, refreshToken, profile, cb) {
       //     User.findOrCreate({ githubId: profile.id }, function(err, user) {
