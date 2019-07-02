@@ -120,49 +120,53 @@ router.put('/:id', async (req, res) => {
   if (!req.body.noteTitle || !req.body.note) {
     return res.status(500).json({
       error: true,
-      message: 'Please include information to upate and try again.'
+      message: 'Please include information to upate and try again.',
+      note: {}
     });
   }
   try {
-    // Pull out new note
-    const currentNote = await Notes.findByNoteId(req.params.id);
-
-    if (currentNote) {
-      // Update any existing information and change updated date
-      if (req.body.notesTitle) currentNote.notesTitle = req.body.notesTitle;
-      if (req.body.note) currentNote.note = req.body.note;
-      if (req.body.note || req.body.noteTitle)
-        currentNote.dateUpated = Date.now();
-
-      console.log(currentNote);
-      // Insert new updated note into database
-      const note = await Notes.update(currentNote, req.params.id);
-
-      if (note) {
-        res.status(200).json({
-          error: false,
-          message: 'The note was updated successfully.',
-          note
-        });
-      } else {
-        res.status(500).json({
-          error: true,
-          message: 'There was an error updating the note.',
-          notes: {}
-        });
-      }
+    const updatedNote = await Notes.update(req.body, req.params.id);
+    if (updatedNote) {
+      const note = await Notes.findByNoteId(req.params.id);
+      res.status(200).json({
+        error: false,
+        message: 'The note was updated successfully',
+        note
+      });
     } else {
-      res.status(500).json({
+      res.status(404).json({
         error: true,
-        message: 'There was an error updating the note.',
-        notes: {}
+        message: 'The note could not be updated.',
+        note: {}
       });
     }
   } catch (error) {
     res.status(500).json({
       error: true,
       message: 'There was an error updating the note.',
-      notes: {}
+      note: {}
+    });
+  }
+});
+
+// Delete note request
+router.delete('/:id', async (req, res) => {
+  try {
+    const deletedNote = await Notes.remove(req.params.id);
+    if (deletedNote) {
+      res
+        .status(200)
+        .json({ error: false, message: 'The note was deleted successfully.' });
+    } else {
+      res.status(500).json({
+        error: true,
+        message: 'The note could not be deleted.'
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      error: true,
+      message: 'There was an error deleting the note.'
     });
   }
 });
