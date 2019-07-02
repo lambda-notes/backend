@@ -19,12 +19,14 @@ const restricted = require('../auth/restricted.js');
 const usersRouter = require('../users/usersRouter.js');
 const notesRouter = require('../notes/notesRouter.js');
 const lessonsRouter = require('../lessons/lessonsRouter.js');
+const videosRouter = require('../videos/videosRouter.js');
 const authRouter = require('../auth/authRouter.js');
 
 // Router assignments
 server.use('/api/restricted/users', usersRouter);
 server.use('/api/restricted/notes', notesRouter);
 server.use('/api/restricted/lessons', lessonsRouter);
+server.use('/api/restricted/videos', videosRouter);
 server.use('/api/auth', authRouter);
 
 // Generic / route for initial server online status check
