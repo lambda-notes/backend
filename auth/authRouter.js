@@ -84,25 +84,32 @@ router.post('/login', async (req, res) => {
 
 router.post('/firebase', async (req, res) => {
   let creds = req.body;
+  console.log(creds);
   try {
     let userCheck = await Users.find()
-      .where({ uid: creds.uid })
+      .where({ gihubId: creds.gihubId })
       .first();
+    res.status(200).json({ data: userCheck });
+
     if (userCheck) {
       res.status(200).json({
-        message: 'The user was logged in successfully.'
+        message: 'The user was logged in successfully.',
+        creds: creds,
+        user: userCheck
       });
     } else {
       let response = Users.insert(creds);
-      if (response) {
-        res.status(200).json({
-          message: 'The user was registered and logged in successfully.'
-        });
-      }
+      console.log(response);
+      res.status(200).json({
+        message: 'The user was registered and logged in successfully.',
+        data: response
+      });
     }
   } catch (error) {
     res.status(500).json({
-      message: 'There was a problem with your request.'
+      message: 'There was a problem with your request.',
+      data: creds,
+      error: error
     });
   }
 });
