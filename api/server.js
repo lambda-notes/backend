@@ -15,7 +15,7 @@ const authRoutes = require('./routes/AuthRoutes');
 configureMiddleware(server);
 
 // Custom restricted middleware import
-const restricted = require('../auth/restricted.js');
+// const restricted = require('../auth/restricted.js');
 
 // Import various split API routes
 const usersRouter = require('../users/usersRouter.js');
