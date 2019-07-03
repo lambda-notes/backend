@@ -43,7 +43,7 @@ module.exports = function(passport_param) {
       {
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        scope: ['user:id', 'user:email'],
+        scope: ['user:id'],
         callbackURL:
           process.env.GITHUB_CALLBACK_URL ||
           'https://lambda-school-notes.herokuapp.com/auth/github/redirect'

@@ -8,7 +8,7 @@ const passport = require('passport');
 router.get(
   '/github',
   passport.authenticate('github', {
-    scope: ['profile', 'email']
+    scope: ['profile']
   })
 );
 
@@ -24,6 +24,7 @@ router.get(
 // ACCESS:  Public
 
 router.get('/github/redirect', passport.authenticate('github'), (req, res) => {
+  console.log('this is req.user---->', req.user);
   let id = req.user.id;
   let token = req.user.token;
   res.cookie('auth', token);
