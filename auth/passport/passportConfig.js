@@ -63,13 +63,14 @@ module.exports = function(passport_param) {
             id: profile._json.id
           })
           .first();
+        console.log('existing user ---->', existingUser);
         if (existingUser) {
           let accessToken = generateToken(existingUser.id);
           existingUser.token = accessToken;
           done(null, existingUser); // supplies passport with the user that has authenticated
         } else {
           let accessToken = generateToken(profile._json.id);
-          await db('users').insert({
+          const results = await db('users').insert({
             githubId: profile._json.id,
             firstName: profile._json.name,
             lastName: profile._json.name,
@@ -78,9 +79,12 @@ module.exports = function(passport_param) {
             token: accessToken,
             cohortID: 1
           });
+          console.log('this is the result----->', result);
+          console.log('this is the access token --->', accessToken);
           const user = await db('users')
             .where({ id: profile._json.id })
             .first();
+          console.log('this is the user------>', user);
           done(null, user);
         }
       }
