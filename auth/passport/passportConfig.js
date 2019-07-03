@@ -63,6 +63,7 @@ module.exports = function(passport_param) {
             id: profile._json.id
           })
           .first();
+        console.log('existing user ---->', existingUser);
         if (existingUser) {
           let accessToken = generateToken(existingUser.id);
           existingUser.token = accessToken;
@@ -78,10 +79,12 @@ module.exports = function(passport_param) {
             token: accessToken,
             cohortID: 1
           });
-          console.log(result);
+          console.log('this is the result----->', result);
+          console.log('this is the access token --->', accessToken);
           const user = await db('users')
             .where({ id: profile._json.id })
             .first();
+          console.log('this is the user------>', user);
           done(null, user);
         }
       }
