@@ -60,7 +60,7 @@ module.exports = function(passport_param) {
         console.log('keys', Object.keys(profile._json));
         const existingUser = await db('users')
           .where({
-            id: profile._json.id
+            githubId: profile._json.id
           })
           .first();
         console.log('existing user ---->', existingUser);
@@ -79,10 +79,10 @@ module.exports = function(passport_param) {
             token: accessToken,
             cohortID: 1
           });
-          console.log('this is the result----->', result);
+          console.log('this is the result----->', results);
           console.log('this is the access token --->', accessToken);
           const user = await db('users')
-            .where({ id: profile._json.id })
+            .where({ githubId: profile._json.id })
             .first();
           console.log('this is the user------>', user);
           done(null, user);
