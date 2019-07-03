@@ -33,7 +33,7 @@ router.get('/github/redirect', passport.authenticate('github'), (req, res) => {
 
 router.get('/logout', (req, res) => {
   req.logout();
-  req.session.destroy;
+  req.session.destroy();
   res.redirect('https://lambda-notes-hackathon.netlify.com');
 });
 
