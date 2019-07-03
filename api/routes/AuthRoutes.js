@@ -28,7 +28,6 @@ router.get('/github/redirect', passport.authenticate('github'), (req, res) => {
   let id = req.user.id;
   let token = req.user.token;
   res.cookie('auth', token);
-  res.status(200).json({ id, token });
   res.redirect(`https://lambda-notes-hackathon.netlify.com/dashboard/`);
 });
 
