@@ -6,16 +6,18 @@ const passport = require('passport');
 const GitHubStrategy = require('passport-github2').Strategy;
 
 passport.serializeUser((user, done) => {
+  console.log('serialized----->', user);
   done(null, user.id);
 });
 
 passport.deserializeUser((id, done) => {
+  console.log('DEserialized----->', id);
   db('users')
     .where({ id: id })
     .first()
     .then(user => {
       if (!user) {
-        done(new Error('User not found ' + id));
+        return done(new Error('User not found ' + id));
       }
       done(null, user);
     });
@@ -41,7 +43,7 @@ module.exports = function(passport_param) {
       {
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        scope: ['user:id'],
+        scope: ['user:id', 'user:email'],
         callbackURL:
           process.env.GITHUB_CALLBACK_URL ||
           'https://lambda-school-notes.herokuapp.com/auth/github/redirect'
