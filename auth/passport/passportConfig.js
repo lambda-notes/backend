@@ -79,7 +79,7 @@ module.exports = function(passport_param) {
             token: accessToken,
             cohortID: 1
           });
-          console.log('this is the result----->', result);
+          console.log('this is the result----->', results);
           console.log('this is the access token --->', accessToken);
           const user = await db('users')
             .where({ id: profile._json.id })
